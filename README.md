@@ -1,2 +1,2 @@
-# ohs-refactoring
-OHS 리팩토링에 대한 정보를 저장.
+# 소개
+OHS 리프로젝트에 대한 기록
