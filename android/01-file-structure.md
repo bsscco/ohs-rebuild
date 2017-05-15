@@ -1,5 +1,5 @@
 ### 파일 구조
-![파일 구조](https://github.com/bsscco/ohs-reproject/blob/master/android/file-structure.png)
+![파일 구조](https://github.com/bsscco/ohs-reproject/blob/master/android/01-file-structure.png)
 
 ### 원칙
 - ```컴포넌트 종류 기준으로 패키징```
