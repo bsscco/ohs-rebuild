@@ -1,3 +1,6 @@
+### 공식 컴포넌트 아키텍처 가이드
+- [사이트](https://developer.android.com/topic/libraries/architecture/index.html)
+
 ### 가장 중요하고 신경써야 할 부분
 - 네트워크 모듈
 - 계정 관련(가입, 로그인, 자동로그인, 수정)
@@ -21,3 +24,4 @@
 - 기획전 기테일
 - 제품 디테일
 - 사진 업로드
+- ...
