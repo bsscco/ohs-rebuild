@@ -1,5 +1,4 @@
-### 공식 컴포넌트 아키텍처 가이드
-- [사이트](https://developer.android.com/topic/libraries/architecture/index.html)
+### [아키텍처 컴포넌트 공식문서](https://developer.android.com/topic/libraries/architecture/index.html)
 
 ### 가장 중요하고 신경써야 할 부분
 - 네트워크 모듈
@@ -10,7 +9,6 @@
 - 딥링크 모듈
 - 크리티컬 방지(ANR, 강제종료)
 - 이벤트 관련
-
 
 ### 개발 순서
 - 프로젝트 셋팅
@@ -25,3 +23,7 @@
 - 제품 디테일
 - 사진 업로드
 - ...
+
+### 주의사항
+- 독립개발이 불가능한 글로벌 네이게이션 시스템이 정립되고 잘 만들어져 있어야 한다.
+- 독립개발이 불가능한 디자인 컨셉을 단순하게 잘 정립해야 하고 가이드라인이 만들어져 있어야 한다.
