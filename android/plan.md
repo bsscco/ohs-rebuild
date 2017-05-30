@@ -12,7 +12,14 @@
 
 ### 개발 순서
 - 프로젝트 셋팅
-- 라이브러리 추가(RxJava2)
+	- project/build.gradle
+	- app/build.gradle
+	- proguard-rules.pro
+- App.java
+- Utils	
+- 3-parties
+- 
+
 - 스플래시
 - 네트워크 모듈, View 모듈, Config모듈
 - 로그인창
