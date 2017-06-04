@@ -250,8 +250,54 @@
 
 - 데이터를 영속적으로 보존하기
 	- (14) 데이터를 영속적으로 보존하기
-		- 만약 유저가 오랜 시간 앱을 떠났다가 돌아오거나, OS가 앱을 강제로 종료시켰다가 재실행 시키는 상황에선 무슨 일이 벌어질까요? 데이터를 re-fetching 해야 합니다. 이것은 caching을 통해 간단히 해결할 수 있습니다. 그러나 이 해결법은 또 다른 문제를 야기합니다. 다른 시간대에 유저 데이터를 요청했을 때 데이터들이 서로 다르다면 유저 경험에 매우 좋지 않습니다. 같은 요청의 데이터들이 일관성을 가질 수 없는 문제는 영속적인 모델을 사용함으로써 해결할 수 있습니다.
-		- 
+		- 만약 유저가 오랜 시간 앱을 떠났다가 돌아오거나, OS가 앱을 강제로 종료시켰다가 재실행 시키는 상황에선 무슨 일이 벌어질까요? 데이터를 re-fetching 해야 합니다. 이것은 caching을 통해 간단히 해결할 수 있습니다. 그러나 이 해결법은 또 다른 문제를 야기합니다. 다른 시간대에 유저 데이터를 요청했을 때 데이터들이 서로 다르다면 유저 경험에 매우 좋지 않습니다. 같은 요청의 데이터들이 일관성을 가질 수 없는 문제는 영속적인 모델을 사용함으로써 해결할 수 있습니다. 이것의 구현체가 Room 라이브러리입니다.
+		- **Room**
+			- ORM 라이브러리입니다. 보일러 플레이트 코드를 최소화합니다.
+			- 컴파일타임에 쿼리가 잘못됐는지 체크합니다.
+			- 이것은 그밖에 DB 데이터가 바뀌었을 때를 관찰해서 LiveData에게 알립니다.
+			- 추가적으로 백그라운드 스레드에서만 동작시켜야 합니다.
+
+	- (15) 데이터 영속 보존을 위해 Room 준비하기
+		- Room을 사용하기 위해서는 로컬 스키마를 정의해야 합니다. 먼저 User 클래스에 @Entity를 마크합니다.
+		```java
+		@Entity
+		class User {
+		  @PrimaryKey
+		  private int id;
+		  private String name;
+		  private String lastName;
+		  // getters and setters for fields
+		}
+		```
+		- 그리고 RoomDatabase를 상속해서 데이터베이스 클래스를 만듭니다.
+		```java
+		@Database(entities = {User.class}, version = 1)
+		public abstract class MyDatabase extends RoomDatabase {
+		}
+		```
+		
+	- (16) DAO 준비
+		- 이제 우리는 유저 데이터를 db에 삽입하기 위한 방법이 필요합니다. DAO를 만들 겁니다.
+		```java
+		@Dao
+		public interface UserDao {
+		    @Insert(onConflict = REPLACE)
+		    void save(User user);
+		    @Query("SELECT * FROM user WHERE id = :userId")
+		    LiveData<User> load(String userId);
+		}
+		```
+		
+	- (17) Room과 DAO 연결하기
+		- 그리고 db로부터 DAO를 참조합니다.
+		```java
+		@Database(entities = {User.class}, version = 1)
+		public abstract class MyDatabase extends RoomDatabase {
+		    public abstract UserDao userDao();
+		}
+		```
+		
+	- (18) 
 
 - 테스팅
 - 최종 아키텍
