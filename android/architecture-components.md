@@ -103,8 +103,9 @@
 		- ViewModel의 유저 필드가 세팅됐을 때 우리는 UI에게 유저 필드의 정보를 알려야 합니다.
 		- LiveData 클래스를 통해 알릴 수 있어요.
 		- LiveData
-			- LiveData는 Observable Data Holder에요.
-			- 
+			- LiveData는 관찰될 수 있는 데이터 홀더에요.
+			- 이 기능을 사용하면 당신의 앱 컴포넌트가 LiveData 객체의 변화를 명시적이고 의존적인 경로 없이 관찰 할 수 있게 됩니다.
+			
 		
 	
 - 데이터 fetching
