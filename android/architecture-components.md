@@ -119,10 +119,19 @@
 		    }
 		}
 		```
-	
 		
-		
-	
+	- 7) ViewController 수정하기 : 이제 우리는 데이터를 관찰해서 UI를 갱신할 수 있도록 프래그먼트를 수정할 겁니다.
+		```java
+		@Override
+		public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		    super.onActivityCreated(savedInstanceState);
+		    viewModel.getUser().observe(this, user -> {
+		      // update UI
+		    });
+		}
+		```
+		- LiveData는 자동으로 프래그먼트의 ```onStart()```에서 데이터를 받고, ```onStop()```에선 데이터를 받지 않고, ```onDestroy()```에서는 Observer를 제거합니다. 그밖에 기기 설정이 바뀌었을 때도 우리가 특별히 할 일은 없습니다. 기기 설정이 바뀔 때 LiveData는 자동으로 데이터를 저장하고, 새로운 ViewModel 인스턴스에서 데이터를 불러옵니다. 이것이 LiveData가 View의 참조를 직접적으로 가지지 않아야 하는 이유입니다.
+
 - 데이터 fetching
 - ViewModel과 Repository 연결하기
 - 데이터 캐싱
