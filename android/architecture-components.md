@@ -1,29 +1,48 @@
-*영어 문서의 내용에서 불필요한 부분은 포함시키지 않음.*
-
-# [소개](https://developer.android.com/topic/libraries/architecture/index.html)
+# 소개
 ### 소개
-- 강건하고, 테스터블하고, 유지보수가 쉬운 앱을 설계하기 위한 라이브러리 묶음.
-- 당신의 UI 컴포넌트 라이프사이클과 영속적 데이터를 핸들링 하기 위해 이 클래스들로 시작해라.
+- 테스트가 쉽게 유지보수가 쉽게 앱을 디자인할 수 있는 라이브러리 모음
 
-### 라이브러리 목록
-- LiveData(데이터 영속성)
-- ViewModel(데이터 바인딩)
-- LifecycleObserver, LifecycleOwner(라이프사이클 관리)
-- Room(SQLite 바인딩)
+### 라이프사이클 컴포넌트
+- 뭔가요?
+	- 기기 설정이 바뀌었을 때 오류가 없게 해줘요.
+	- 메모리 누수를 피하게 해줘요.
+	- 데이터를 쉽게 로딩하게 해줘요.
+- 클래스 목록
+	- LiveData
+	- ViewModel
+	- LifecycleObserver
+	- LifecycleOwner
+- 링크
+	- [코드랩](https://codelabs.developers.google.com/codelabs/android-lifecycles/#0)
+	- [닥스](https://developer.android.com/topic/libraries/architecture/lifecycle.html)
+	- [샘플](https://github.com/googlesamples/android-architecture-components)
+	
+### Room
+- 뭔가요?
+	- SQLite ORM 라이브러리
+	- 컴파일타임에 SQL을 체크해줘요.
+- 클래스 목록
+	- Room
+- 링크
+	- [코드랩](https://codelabs.developers.google.com/codelabs/android-persistence/#0)
+	- [닥스](https://developer.android.com/topic/libraries/architecture/room.html)
+	- [샘플](https://github.com/googlesamples/android-architecture-components)
+	
+# 들어가면서
+### 개발자들이 직면한 공통의 문제
 
-# [앱 아키텍쳐 가이드](https://developer.android.com/topic/libraries/architecture/guide.html)
-### 소개
-- 이 가이드는 앱 빌딩의 기본을 아는 개발자를 대상으로 한다.
+### 아키텍쳐 공통 원칙
 
-### 앱 개발자에게 직면한 공통의 문제
-- 안드로이드 앱은 PC파트와 달리 entry point가 여러 개(액티비티, 프래그먼트, 브로드 캐스트 등)다.
-- 안드로이드 앱은 유저가 다른 앱들을 통해 실행시킬 수 있기 때문에 더 복잡해질 수 밖에 없다.
-- 모바일 기기들이 제한적 리소스를 가지고 있다는 것을 잊지 말아야 한다. 여지가 필요할 때 OS는 어떤 앱들을 강제로 죽일 수 있다.
-- 따라서 당신의 앱 컴포넌트들은 당신의 컨트롤 영역에 있지 않다. 당신은 어떤 앱 데이터나 상태를 앱 컴포넌트에 저장해선 안 된다. 각각의 컴포넌트는 독립적이다.
+### 추천하는 앱 아키텍쳐
+- UI Building
+- 데이터 fetching
+- ViewModel과 Repository 연결하기
+- 데이터 캐싱
+- 데이터를 영속적으로 보존하기
+- 테스팅
+- 최종 아키텍
 
-### 공통 아키텍처 원칙
-- 당신은 앱 데이터나 상태를 저장하기 위해 앱 컴포넌트를 사용할 수 없다. 그럼 어떻게 구조를 짜야 할까?
-- 가장 중요한 것은 관심사의 분리다. 모든 코드를 앱 컴포넌트에 쓰는 것은 공통된 실수다. UI 또는 OS와 인터렉션 하지 않는 glue 클래스들은 의존성이 가능한 가볍게 유지되어야 한다. 
-- 두 번째 중요한 것은 UI를 영속적인 모델로부터 운영해야 한다는 것이다. 영속성은 두 가지 이유에서 비롯된 아이디어다. 하나는 
+### 원칙 가이드
 
-### 
+### 추가적인 내용
+
