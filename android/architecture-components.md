@@ -1,8 +1,8 @@
-# 소개
-### 소개
+# 짧은 소개
+### 아키텍쳐 컴포넌트
 - 테스트가 쉽게 유지보수가 쉽게 앱을 디자인할 수 있는 라이브러리 모음
 
-### 라이프사이클 컴포넌트
+### 컴포넌트:라이프사이클 컴포넌트
 - 뭔가요?
 	- 기기 설정이 바뀌었을 때 오류가 없게 해줘요.
 	- 메모리 누수를 피하게 해줘요.
@@ -17,7 +17,7 @@
 	- [닥스](https://developer.android.com/topic/libraries/architecture/lifecycle.html)
 	- [샘플](https://github.com/googlesamples/android-architecture-components)
 	
-### Room
+### 컴포넌트:Room
 - 뭔가요?
 	- SQLite ORM 라이브러리
 	- 컴파일타임에 SQL을 체크해줘요.
@@ -28,13 +28,85 @@
 	- [닥스](https://developer.android.com/topic/libraries/architecture/room.html)
 	- [샘플](https://github.com/googlesamples/android-architecture-components)
 	
-# 들어가면서
+# 덜 짧은 소개
 ### 개발자들이 직면한 공통의 문제
+- 불행하게도 안드로이드앱의 독립적인 다양한 컴포넌트(Activity, Fragment 등)로 구성되어있기 때문에 entry point 또한 컴포넌트별로 가질 수 있다.
+- 또한 메모리 관리를 위해 OS가 앱을 강제종료 시킬 수도 있다. 
+- 따라서 앱 데이터나 상태를 컴포넌트에 저장해서는 안 된다. 그리고 앱 데이터나 상태는 컴포넌트별로 의존적이지 않아야 한다. 
 
 ### 아키텍쳐 공통 원칙
+- 가장 중요한 것은 **관심사의 분리**이다. 
+	- 모든 코드를 액티비티나 프래그먼트에 작성하는 실수를 범하곤 한다. 
+	- 이것은 라이프사이클과 얽혀서 여러 문제들을 야기시킨다.
+	- 앱 컴포넌트에서 UI 핸들링이나 OS와의 인터렉션을 없애면 관심사의 분리가 되면서 라이프사이클과 관련된 문제들을 피할 수 있다.
 
+- 그 다음 중요한 것은 **영속적인 모델로부터 UI를 운용**하는 것이다. 
+	- OS에 의해 앱이 강제종료 됐다가 다시 살아나는 등의 라이프사이클 문제가 발생해도 유저는 앱이 상태를 잃어버리기 원치 않는다.
+	- 영속적인 모델은 라이프사이클로부터 독립적으로 앱 데이터를 핸들링하는 책임을 지기 때문에 이러한 문제의 해결책이다.
+	- 그것은 모델이 앱 컴포넌트나 View로부터 독립되어야 한다는 뜻이다. 
+	
 ### 추천하는 앱 아키텍쳐
 - UI Building
+	- 유저 프로필을 보여주는 화면(UserProfileFragment.java, user_profile_layout.xml)이 있다고 치자.
+	- UI를 운용하기 위해서 우리의 데이터모델은 두 가지 데이터 요소로 구성된다.
+		 - User ID
+		 	- User ID는 프래그먼트 인자를 사용하는 프래그먼트에 정보를 넘길 때 최선의 방법이다. 
+			- User ID로 유저 데이터를 식별할 수 있다.
+		 - User Object
+		 	- 유저 데이터
+	- 우리는 UserProfileViewModel를 생성할 것이다.
+		- ViewModel
+			- ViewModel은 프래그먼트, 액티비티 같은 UI를 기술하는 데이터를 제공한다.
+			- ViewModel은 비지니스파트 데이터를 핸들링한다.
+			- ViewModel은 View를 알지 못하며 기기 설정 변경에 영향을 받지 않는다.
+	- 이제 우리는 3개의 파일을 가진다.
+		- user_profile_layout.xml
+			- UI가 정의된 파일
+		- UserProfileViewModel.java
+			- UI를 위한 데이터를 준비하는 클래스
+			```java
+			public class UserProfileViewModel extends ViewModel {
+			    private String userId;
+			    private User user;
+
+			    public void init(String userId) {
+				this.userId = userId;
+			    }
+			    public User getUser() {
+				return user;
+			    }
+			}
+			```
+		- UserProfileFragment.java
+			- ViewModel에 있는 데이터를 보여주고 유저 인터렉션에 반응하는 UI 컨트롤러
+			```java
+			public class UserProfileFragment extends LifecycleFragment {
+			    private static final String UID_KEY = "uid";
+			    private UserProfileViewModel viewModel;
+
+			    @Override
+			    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+				super.onActivityCreated(savedInstanceState);
+				String userId = getArguments().getString(UID_KEY);
+				viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+				viewModel.init(userId);
+			    }
+
+			    @Override
+			    public View onCreateView(LayoutInflater inflater,
+					@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+				return inflater.inflate(R.layout.user_profile, container, false);
+			    }
+			}
+			```
+	- 이제 이 3가지 어떻게 연결할까요?
+		- ViewModel의 유저 필드가 세팅됐을 때 우리는 UI에게 유저 필드의 정보를 알려야 합니다.
+		- LiveData 클래스를 통해 알릴 수 있어요.
+		- LiveData
+			- LiveData는 Observable Data Holder에요.
+			- 
+		
+	
 - 데이터 fetching
 - ViewModel과 Repository 연결하기
 - 데이터 캐싱
