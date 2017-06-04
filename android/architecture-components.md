@@ -98,14 +98,28 @@
 			    }
 			}
 			```
-		- UserProfileFragment는 View를 
+		- UserProfileFragment(ViewController)는 user_profile_layout.xml(View)을 inflating 하여 가지고 있고, UserProfileViewModel(ViewModel) 객체를 생성하여 가지고 있습니다.
 		
-	- 5) View와 ViewModel을 독립적으로 연결하기 : 이제 이 3가지 어떻게 연결할까요?
+	- 5) View와 ViewModel을 독립적으로 연결하는 방법 : 이제 이 3가지 어떻게 연결할까요?
 		- ViewModel의 유저 필드가 세팅됐을 때 우리는 UI에게 유저 필드의 정보를 알려야 합니다. LiveData 클래스를 통해 알릴 수 있습니다.
 		- **LiveData**
 			- 관찰될 수 있는 데이터 홀더입니다. 이 기능을 사용하면 당신의 앱 컴포넌트가 LiveData 객체의 변화를 명시적이고 의존적인 경로 없이 관찰 할 수 있게 됩니다.
 			- 앱 컴포넌트들의 라이프사이클을 존중하며 앱이 메모리를 더 사용하지 않도록 메모리 누수를 방지합니다.
-	- 6) 이제 우리는 UserProfileViewModel 안에 있는 유저 필드를 LiveData<User>로 대체할 거에요.
+	
+	- 6) View와 ViewModel을 독립적으로 연결하기
+		- 이제 우리는 UserProfileViewModel 안에 있는 유저 필드를 LiveData<User>로 대체할 겁니다. 그러면 프래그먼트는 데이터가 갱신됐을 때 알림 받을 수 있습니다.
+		- LiveData가 뛰어난 이유는, 그것이 라이프사이클을 잘 알고 있기 때문에 참조들을 clean up 시키는 작업을 라이프사이클에 따라서 자동으로 해주기 때문입니다.
+		```java
+		public class UserProfileViewModel extends ViewModel {
+		    ...
+		    // private User user;
+		    private LiveData<User> user;
+		    public LiveData<User> getUser() {
+			return user;
+		    }
+		}
+		```
+	
 		
 		
 	
