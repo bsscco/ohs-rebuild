@@ -44,73 +44,75 @@
 	
 ### 추천하는 앱 아키텍쳐
 - UI Building
-	- 1) View와 ViewController 준비 : 유저 프로필을 보여주는 화면(UserProfileFragment.java, user_profile_layout.xml)이 있다고 가정합시다.
-		- UserProfileFragment는 LifecycleOwner를 implementing 한 class입니다.
+	- 1) View와 ViewController 준비
+		- 유저 프로필을 보여주는 화면(UserProfileFragment.java, user_profile_layout.xml)이 있다고 가정합시다. UserProfileFragment는 LifecycleOwner를 implementing 한 class입니다.
 
-	- 2) 데이터 모델 구상 : UI를 운용하기 위해서 데이터 모델을 두 가지 데이터 요소로 구성합니다.
-		- User ID
-		 	- 프래그먼트 인자를 사용하는 프래그먼트에 정보를 넘길 때 최선의 방법이 됩니다.
-			- User ID로 유저 데이터를 식별할 수 있습니다.
-		- User Object
-		 	- 유저 데이터
+	- 2) 데이터 모델 구상
+		- UI를 운용하기 위해서 데이터 모델을 두 가지 데이터 요소로 구성합니다.
+			- User ID
+				- 프래그먼트 인자를 사용하는 프래그먼트에 정보를 넘길 때 최선의 방법이 됩니다.
+				- User ID로 유저 데이터를 식별할 수 있습니다.
+			- User Object
+				- 유저 데이터
 	
-	- 3) ViewModel 준비 : 우리는 UserProfileViewModel를 생성할 겁니다.
+	- 3) ViewModel 준비
+		- 우리는 UserProfileViewModel를 생성할 겁니다.
 		- **ViewModel**
 			- 프래그먼트, 액티비티 같은 UI를 기술하는 데이터를 제공합니다.
 			- 비지니스 파트 데이터를 핸들링합니다.
 			- View를 알지 못하며 기기 설정 변경에 영향을 받지 않습니다.
 	
-	- 4) 준비 결과 : 이제 우리는 3개의 파일을 가지게 됐습니다.
-		- user_profile_layout.xml
-			- UI가 정의된 파일
-		- UserProfileViewModel.java
-			- UI를 위한 데이터를 준비하는 클래스
-			```java
-			public class UserProfileViewModel extends ViewModel {
-			    private String userId;
-			    private User user;
+	- 4) 준비 결과
+		- 이제 우리는 3개의 파일을 가지게 됐습니다.
+			- user_profile_layout.xml
+				- UI가 정의된 파일
+			- UserProfileViewModel.java
+				- UI를 위한 데이터를 준비하는 클래스
+				```java
+				public class UserProfileViewModel extends ViewModel {
+				    private String userId;
+				    private User user;
 
-			    public void init(String userId) {
-				this.userId = userId;
-			    }
-			    public User getUser() {
-				return user;
-			    }
-			}
-			```
-		- UserProfileFragment.java
-			- ViewModel에 있는 데이터를 보여주고 유저 인터렉션에 반응하는 UI 컨트롤러
-			```java
-			public class UserProfileFragment extends LifecycleFragment {
-			    private static final String UID_KEY = "uid";
-			    private UserProfileViewModel viewModel;
+				    public void init(String userId) {
+					this.userId = userId;
+				    }
+				    public User getUser() {
+					return user;
+				    }
+				}
+				```
+			- UserProfileFragment.java
+				- ViewModel에 있는 데이터를 보여주고 유저 인터렉션에 반응하는 UI 컨트롤러
+				```java
+				public class UserProfileFragment extends LifecycleFragment {
+				    private static final String UID_KEY = "uid";
+				    private UserProfileViewModel viewModel;
 
-			    @Override
-			    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-				super.onActivityCreated(savedInstanceState);
-				String userId = getArguments().getString(UID_KEY);
-				viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
-				viewModel.init(userId);
-			    }
+				    @Override
+				    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+					super.onActivityCreated(savedInstanceState);
+					String userId = getArguments().getString(UID_KEY);
+					viewModel = ViewModelProviders.of(this).get(UserProfileViewModel.class);
+					viewModel.init(userId);
+				    }
 
-			    @Override
-			    public View onCreateView(LayoutInflater inflater,
-					@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-				return inflater.inflate(R.layout.user_profile, container, false);
-			    }
-			}
-			```
+				    @Override
+				    public View onCreateView(LayoutInflater inflater,
+						@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+					return inflater.inflate(R.layout.user_profile, container, false);
+				    }
+				}
+				```
 		- UserProfileFragment(ViewController)는 user_profile_layout.xml(View)을 inflating 하여 가지고 있고, UserProfileViewModel(ViewModel) 객체를 생성하여 가지고 있습니다.
 		
-	- 5) View와 ViewModel을 연결하는 방법 : 이제 이 3가지 어떻게 연결할까요?
-		- ViewModel의 유저 필드가 세팅됐을 때 우리는 UI에게 유저 필드의 정보를 알려야 합니다. LiveData 클래스를 통해 알릴 수 있습니다.
+	- 5) View와 ViewModel을 연결하는 방법
+		- 이제 이 3가지 어떻게 연결할까요? ViewModel의 유저 필드가 세팅됐을 때 우리는 UI에게 유저 필드의 정보를 알려야 합니다. LiveData 클래스를 통해 알릴 수 있습니다.
 		- **LiveData**
 			- 관찰될 수 있는 데이터 홀더입니다. 이 기능을 사용하면 우리의 앱 컴포넌트가 LiveData 객체의 변화를 명시적이고 의존적인 경로 없이 관찰 할 수 있게 됩니다.
 			- 앱 컴포넌트들의 라이프사이클을 존중하며 앱이 메모리를 더 사용하지 않도록 메모리 누수를 방지합니다.
 	
 	- 6) View와 ViewModel을 LiveData로 연결하기
-		- 이제 우리는 UserProfileViewModel 안에 있는 유저 필드를 LiveData<User>로 대체할 겁니다. 그러면 프래그먼트는 데이터가 갱신됐을 때 알림 받을 수 있습니다.
-		- LiveData가 뛰어난 이유는, 그것이 라이프사이클을 잘 알고 있기 때문에 참조들을 clean up 시키는 작업을 라이프사이클에 따라서 자동으로 해주기 때문입니다.
+		- 이제 우리는 UserProfileViewModel 안에 있는 유저 필드를 LiveData<User>로 대체할 겁니다. 그러면 프래그먼트는 데이터가 갱신됐을 때 알림 받을 수 있습니다. LiveData가 뛰어난 이유는, 그것이 라이프사이클을 잘 알고 있기 때문에 참조들을 clean up 시키는 작업을 라이프사이클에 따라서 자동으로 해주기 때문입니다.
 		```java
 		public class UserProfileViewModel extends ViewModel {
 		    ...
@@ -122,7 +124,8 @@
 		}
 		```
 		
-	- 7) ViewController에서 LiveData 사용하기 : 이제 우리는 데이터를 관찰해서 UI를 갱신할 수 있도록 프래그먼트를 수정할 겁니다.
+	- 7) ViewController에서 LiveData 사용하기
+		- 이제 우리는 데이터를 관찰해서 UI를 갱신할 수 있도록 프래그먼트를 수정할 겁니다.
 		```java
 		@Override
 		public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -135,8 +138,8 @@
 		- LiveData는 자동으로 프래그먼트의 ```onStart()```에서 데이터를 받고, ```onStop()```에선 데이터를 받지 않고, ```onDestroy()```에서는 Observer를 제거합니다. 그밖에 기기 설정이 바뀌었을 때도 우리가 특별히 할 일은 없습니다. 기기 설정이 바뀔 때 LiveData는 자동으로 데이터를 저장하고, 새로운 ViewModel 인스턴스에서 데이터를 불러옵니다. 이것이 LiveData가 View의 참조를 직접적으로 가지지 않아야 하는 이유입니다.
 
 - 데이터 fetching
-	- 8) 데이터 fetching API 준비하기 : ViewModel이 어떻게 유저 데이터를 fetching 할까요?
-		- 우리의 백엔드가 REST API를 제공한다고 가정해서 우리는 Retrofit 라이브러리를 사용할 겁니다.
+	- 8) 데이터 fetching API 준비하기
+		- ViewModel이 어떻게 유저 데이터를 fetching 할까요? 우리의 백엔드가 REST API를 제공한다고 가정해서 우리는 Retrofit 라이브러리를 사용할 겁니다.
 		```java
 		public interface Webservice {
 		    /**
