@@ -44,12 +44,13 @@
 ### 추천하는 앱 아키텍쳐
 - UI Building
 	- 1) View와 ViewController 준비 : 유저 프로필을 보여주는 화면(UserProfileFragment.java, user_profile_layout.xml)이 있다고 가정합시다.
+		- UserProfileFragment는 LifecycleOwner를 implementing 한 class입니다.
 
 	- 2) 데이터 모델 구상 : UI를 운용하기 위해서 데이터 모델을 두 가지 데이터 요소로 구성합니다.
-		 - User ID
+		- User ID
 		 	- 프래그먼트 인자를 사용하는 프래그먼트에 정보를 넘길 때 최선의 방법이 됩니다.
 			- User ID로 유저 데이터를 식별할 수 있습니다.
-		 - User Object
+		- User Object
 		 	- 유저 데이터
 	
 	- 3) ViewModel 준비 : 우리는 UserProfileViewModel를 생성할 겁니다.
