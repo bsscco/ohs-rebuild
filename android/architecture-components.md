@@ -2,7 +2,7 @@
 ### 아키텍쳐 컴포넌트
 - 테스트가 쉽게 유지보수가 쉽게 앱을 디자인할 수 있는 라이브러리 모음
 
-### 컴포넌트:라이프사이클 컴포넌트
+### 컴포넌트 : 라이프사이클 컴포넌트
 - 뭔가요?
 	- 기기 설정이 바뀌었을 때 오류가 없게 해줍니다.
 	- 메모리 누수를 피하게 해줍니다.
@@ -17,7 +17,7 @@
 	- [닥스](https://developer.android.com/topic/libraries/architecture/lifecycle.html)
 	- [샘플](https://github.com/googlesamples/android-architecture-components)
 	
-### 컴포넌트:Room
+### 컴포넌트 : Room
 - 뭔가요?
 	- SQLite ORM 라이브러리
 	- 컴파일타임에 SQL을 체크해줘요.
