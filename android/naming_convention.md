@@ -1,5 +1,5 @@
 ### 화면 클래스 네이밍
-- <컨텐츠타입>[화면타입(List/Detail/Dl)][For파라메터]<Acti/Frag>
+- <컨텐츠타입>[화면타입(List/Detail/Dl)][For파라메터]컴포넌트타입(Acti/Frag)
 - 예)
 	- SnapsDetailActi
 	- SnapsListForUserFrag
