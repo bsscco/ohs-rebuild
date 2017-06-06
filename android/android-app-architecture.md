@@ -378,9 +378,45 @@
 				- CountingTaskExecuteRule : instrumentation test를 위해서 아키텍처 컴포넌트의 백그라운드 작업을 기다리게 하기 위해 사용되거나 리소스를 대기하는 espresso를 연결하기 위해 사용될 수 있습니다.
 
 - 최종 아키텍쳐
-	- 
+	- ![final-architecture.png](https://developer.android.com/topic/libraries/architecture/images/final-architecture.png)
+	- Activity/Fragment : ViewModel = 1 : 1
+	- ViewModel has many LiveDatas
+	- ViewModel references singleton Repository
 
-### 원칙 가이드
+### 원칙을 가이드 합니다.
+- enty point들(앱 컴포넌트)은 데이터를 가지고 있어서는 안 됩니다. 각 컴포넌트의 라이프사이클 문제 때문입니다. 
+- 각 모듈 간 책임지는 경계를 칼 같이 나누세요. 어떤 모듈에 관련없는 기능들이 모여 있으면 테스트가 어렵고 유지보수가 곤란해지기 때문입니다.
+- 각 모듈을 가능한한 작게 만드세요. 어떤 모듈에 관련없는 기능들이 모여 있으면 테스트가 어렵고 유지보수가 곤란해지기 때문입니다.
+- 각 모듈을 정의할 때 어떻게 테스터블하게 정의할지 고민하세요. mock을 만들어 테스트하기 쉽기 때문입니다.
+- 중복 코드를 다시 작성하는 데에 시간을 뺏기지 말고 아키텍처 컴포넌트나 기타 다른 라이브러리를 통해 정신적 에너지를 다른 창의적인 영역에 사용하세요.
+- 데이터를 되도록 많이 영속적으로 보관하세요. 기기를 껐다 켰을 때 사용경험을 유지시킬 수 있고, 연결 속도가 빨라집니다.
+- 데이터 저장소는 항상 the single source of truth 원칙을 지켜야 합니다. 다른 화면에서의 데이터 싱크를 맞추고, 여러 곳에서의 불필요한 새로고침 작업을 없애기 위함입니다.
+
 
 ### 추가적인 내용
+- 우리는 네트워크 상태를 Resource 클래스로 빼낼 겁니다.
+```java
+//a generic class that describes a data with a status
+public class Resource<T> {
+    @NonNull public final Status status;
+    @Nullable public final T data;
+    @Nullable public final String message;
+    private Resource(@NonNull Status status, @Nullable T data, @Nullable String message) {
+        this.status = status;
+        this.data = data;
+        this.message = message;
+    }
 
+    public static <T> Resource<T> success(@NonNull T data) {
+        return new Resource<>(SUCCESS, data, null);
+    }
+
+    public static <T> Resource<T> error(String msg, @Nullable T data) {
+        return new Resource<>(ERROR, data, msg);
+    }
+
+    public static <T> Resource<T> loading(@Nullable T data) {
+        return new Resource<>(LOADING, data, null);
+    }
+}
+```
