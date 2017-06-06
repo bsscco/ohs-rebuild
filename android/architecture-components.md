@@ -1,16 +1,16 @@
 # 짧은 소개
 ### 아키텍쳐 컴포넌트
-- 테스트가 쉽게 유지보수가 쉽게 앱을 디자인할 수 있는 라이브러리 모음
+- 테스트가 쉽고 유지보수가 쉬운 앱을 설계할 수 있도록 도와주는 라이브러리 모음
 
 ### 컴포넌트 : 라이프사이클 컴포넌트
 - 뭔가요?
 	- 기기 설정이 바뀌었을 때 오류가 없게 해줍니다.
-	- 메모리 누수를 피하게 해줍니다.
+	- 라이프사이클과 관련된 문제를 처리하지 않아서 발생하는 메모리 누수를 피하게 해줍니다.
 	- 데이터를 쉽게 로딩하게 해줍니다.
 - 클래스 목록
-	- LiveData(라이프사이클에 맞춰 *데이터를 자동 관리*해주는 클래스)
-	- Repository(*데이터 연산*을 담고 있는 클래스)
-	- ViewModel(뷰를 위한 *데이터를 담고 있고, 핸들링하는* 클래스) 
+	- LiveData(라이프사이클에 맞춰 **데이터를 자동 관리**해주는 클래스)
+	- Repository(**데이터를 연산**하는 클래스)
+	- ViewModel(뷰를 위한 **데이터를 담고 있고, 데이터를 핸들링하는** 클래스) 
 	- LifecycleObserver(LiveData의 자동화를 위한 기능이 들어있는 클래스)
 	- LifecycleOwner(LiveData의 자동화를 위한 기능이 들어있는 클래스)
 - 링크
@@ -21,7 +21,7 @@
 ### 컴포넌트 : Room
 - 뭔가요?
 	- SQLite ORM 라이브러리
-	- 컴파일타임에 SQL을 체크해줘요.
+	- 컴파일 타임에 쿼리를 체크해줍니다.
 - 클래스 목록
 	- Room
 - 링크
@@ -39,8 +39,8 @@
 - 가장 중요한 원칙은 **관심사의 분리**를 하는 것입니다. 
 	- 우리는 모든 코드를 액티비티나 프래그먼트에 작성하는 실수를 범하곤 합니다. 이것은 라이프사이클과 관련있는 여러 문제들을 야기시킵니다. 앱 컴포넌트에서 UI 핸들링이나 OS와의 인터렉션을 독립시킴으로써 관심사의 분리를 실현할 수 있습니다. **관심사의 분리를 통해 라이프사이클과 관련된 문제들을 피할 수 있습니다.**
 
-- 그 다음 중요한 원칙은 **영속적인 모델로부터 UI를 운용**하는 것입니다. 
-	- OS에 의해 앱이 강제종료 됐다가 다시 살아나는 등의 라이프사이클 문제가 발생해도 유저는 앱이 상태를 잃어버리기 원치 않습니다. **영속적인 모델은 라이프사이클로부터 독립적으로 앱 데이터를 핸들링하는 책임을 지기 때문에 이러한 문제의 해결책이 됩니다.** 그것은 모델이 앱 컴포넌트나 View로부터 독립되어야 한다는 뜻입니다. 
+- 그 다음 중요한 원칙은 **영속적인 모델(MVC에서 M)로부터 UI를 운용**하는 것입니다. 
+	- OS에 의해 앱이 강제종료 됐다가 다시 살아나는 등의 라이프사이클 문제가 발생해도 유저는 앱이 상태를 잃어버리기 원치 않습니다. **영속적인 모델은 라이프사이클로부터 독립적으로 앱 데이터를 핸들링하는 책임을 지기 때문에 이러한 문제의 해결책이 됩니다.** 그것은 위에서 말했던 것처럼 관심사의 분리를 통해 모델이 앱 컴포넌트나 View로부터 독립되어야 한다는 뜻입니다. 
 	
 ### 추천하는 앱 아키텍쳐
 - UI Building
@@ -55,7 +55,7 @@
 			- User Object
 				- 유저 데이터
 	
-	- (3) ViewModel 준비
+	- (3) ViewModel(Model을 포함하고 있음) 준비
 		- 우리는 UserProfileViewModel를 생성할 겁니다.
 		- **ViewModel**
 			- 프래그먼트, 액티비티 같은 UI를 기술하는 데이터를 제공합니다.
@@ -64,9 +64,9 @@
 	
 	- (4) 준비 결과
 		- 이제 우리는 3개의 파일을 가지게 됐습니다.
-			- user_profile_layout.xml
+			- View : user_profile_layout.xml
 				- UI가 정의된 파일
-			- UserProfileViewModel.java
+			- ViewModel : UserProfileViewModel.java
 				- UI를 위한 데이터를 준비하는 클래스
 				```java
 				public class UserProfileViewModel extends ViewModel {
@@ -81,7 +81,7 @@
 				    }
 				}
 				```
-			- UserProfileFragment.java
+			- ViewController : UserProfileFragment.java
 				- ViewModel에 있는 데이터를 보여주고 유저 인터렉션에 반응하는 UI 컨트롤러
 				```java
 				public class UserProfileFragment extends LifecycleFragment {
@@ -105,13 +105,13 @@
 				```
 		- UserProfileFragment(ViewController)는 user_profile_layout.xml(View)을 inflating 하여 가지고 있고, UserProfileViewModel(ViewModel) 객체를 생성하여 가지고 있습니다.
 		
-	- (5) View와 ViewModel을 연결하는 방법
+	- (5) Model의 갱신을 View에게 알리려면?
 		- 이제 이 3가지 어떻게 연결할까요? ViewModel의 유저 필드가 세팅됐을 때 우리는 UI에게 유저 필드의 정보를 알려야 합니다. LiveData 클래스를 통해 알릴 수 있습니다.
 		- **LiveData**
 			- 관찰될 수 있는 데이터 홀더입니다. 이 기능을 사용하면 우리의 앱 컴포넌트가 LiveData 객체의 변화를 명시적이고 의존적인 경로 없이 관찰 할 수 있게 됩니다.
 			- 앱 컴포넌트들의 라이프사이클을 존중하며 앱이 메모리를 더 사용하지 않도록 메모리 누수를 방지합니다.
 	
-	- (6) View와 ViewModel을 LiveData로 연결하기
+	- (6) Model의 갱신을 알리기 위해 LiveData를 준비하기
 		- 이제 우리는 UserProfileViewModel 안에 있는 유저 필드를 LiveData<User>로 대체할 겁니다. 그러면 프래그먼트는 데이터가 갱신됐을 때 알림 받을 수 있습니다. LiveData가 뛰어난 이유는, 그것이 라이프사이클을 잘 알고 있기 때문에 참조들을 clean up 시키는 작업을 라이프사이클에 따라서 자동으로 해주기 때문입니다.
 		```java
 		public class UserProfileViewModel extends ViewModel {
@@ -277,7 +277,7 @@
 		```
 		
 	- (16) DAO 준비
-		- 이제 우리는 유저 데이터를 db에 삽입하기 위한 방법이 필요합니다. DAO를 만들 겁니다.
+		- 이제 우리는 유저 데이터를 DB에 삽입하기 위한 방법이 필요합니다. DAO를 만들 겁니다.
 		```java
 		@Dao
 		public interface UserDao {
@@ -289,15 +289,72 @@
 		```
 		
 	- (17) Room과 DAO 연결하기
-		- 그리고 db로부터 DAO를 참조합니다.
+		- 그리고 DB로부터 DAO를 참조합니다.
 		```java
 		@Database(entities = {User.class}, version = 1)
 		public abstract class MyDatabase extends RoomDatabase {
 		    public abstract UserDao userDao();
 		}
 		```
+		- MyDatabase는 추상화 클래스입니다. Room은 자동으로 구현체를 제공합니다. 자세한 내용은 닥스를 참고하세요.
 		
-	- (18) 
+	- (18) Repository와 Room 연결하기
+		- 이제 우리는 Room의 data source와 협동하기 위해 UserRepository를 수정할 겁니다.
+		```java
+		@Singleton
+		public class UserRepository {
+		    private final Webservice webservice;
+		    private final UserDao userDao;
+		    private final Executor executor;
+
+		    @Inject
+		    public UserRepository(Webservice webservice, UserDao userDao, Executor executor) {
+			this.webservice = webservice;
+			this.userDao = userDao;
+			this.executor = executor;
+		    }
+
+		    public LiveData<User> getUser(String userId) {
+			refreshUser(userId); // 없으면 서버에서 가져와서 DB에 저장한다.
+			// return a LiveData directly from the database.
+			return userDao.load(userId); // DB에서 불러온다.
+		    }
+
+		    private void refreshUser(final String userId) {
+			executor.execute(() -> {
+			    // running in a background thread
+			    // check if user was fetched recently
+			    boolean userExists = userDao.hasUser(FRESH_TIMEOUT);
+			    if (!userExists) {
+				// refresh the data
+				Response response = webservice.getUser(userId).execute();
+				// TODO check for error etc.
+				// Update the database.The LiveData will automatically refresh so
+				// we don't need to do anything else here besides updating the database
+				userDao.save(response.body());
+			    }
+			});
+		    }
+		}
+		```
+		- UserRepository로부터 오는 데이터의 장소를 바꾸어도 우리는 UserProfileFragment나 UserProfileViewModel을 수정할 필요가 없습니다. 그 이유는 추상화를 통한 유연성을 제공하기 때문입니다. 이것이 또한 놀라운 이유는 우리가 UserProfileViewModel을 테스트하기 위해 fake UserRepository를 제공할 수도 있기 때문입니다.
+		
+	- (19) 하나의 뿌리를 둔 데이터 뭉치
+		- 
+		
+	- 클래스 관계도
+		- 
+	
+	- 데이터 셋팅의 흐름
+		- UserProfileFragment는 ```onViewCreated()```에서 멤버변수 UserProfileViewModel의 ```init()``` 호출 ->
+			- UserProfileViewModel은 싱글톤 UserRepository의 ```getUser()``` 호출 ->
+				- UserRepository는 멤버변수 UserDao에게 User데이터를 물어서 User데이터가 없으면 멤버변수 Webservice를 통해 서버로부터 User데이터를 가져와서 UserDao를 통해 User데이터를 저장  
+				- UserRepository는 멤버변수 UserDao를 통해 User데이터를 불러와서 반환 ->
+			- UserProfileViewModel은 반환받은 User데이터를 멤버변수 ```LiveData<User>```에 담기 -> 
+		- UserProfileFragment는 멤버변수 UserProfileViewModel의 ```getUser()```로부터 ```LiveData<User>```를 받아 ```observe()```를 호출
+	- 데이터 갱신의 흐름
+		- ```LiveData<User>```가 갱신됨 ->
+			- UserProfileFragment는 ```LiveData<User>```의 ```observe()```를 호출하면서 넣었던 콜백을 통해 갱신됨을 통보받고 핸들링
 
 - 테스팅
 - 최종 아키텍
