@@ -420,3 +420,110 @@ public class Resource<T> {
     }
 }
 ```
+
+
+
+# 아키텍쳐 컴포넌트를 프로젝트에 추가하기
+### 구글 메이븐 저장소 추가하기
+- 프로젝트 build.gragle에 추가합니다.
+```
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://maven.google.com' }
+    }
+}
+```
+
+### 아키텍쳐 컴포넌트 추가하기
+- 앱 build.gradle에 추가합니다.
+- Lifecycles, LiveData, ViewModel
+	- compile "android.arch.lifecycle:runtime:1.0.0-alpha1"
+	- compile "android.arch.lifecycle:extensions:1.0.0-alpha1"
+	- annotationProcessor "android.arch.lifecycle:compiler:1.0.0-alpha1"
+- Room
+	- compile "android.arch.persistence.room:runtime:1.0.0-alpha1"
+	- annotationProcessor "android.arch.persistence.room:compiler:1.0.0-alpha1"
+	- Room 마이그레이션 테스트
+		- testCompile "android.arch.persistence.room:testing:1.0.0-alpha1"
+	- Room RxJava 지원
+		- compile "android.arch.persistence.room:rxjava2:1.0.0-alpha1"
+
+
+
+# 라이프사이클 핸들링하기
+### 소개
+- android.arch.lifecycle 패키지는 우리가 lifecycle-aware 컴포넌트를 만들 수 있도록 해주는 클래스와 인터페이스를 제공합니다. lifecycler-arware 컴포넌트는 현재 액티비티나 프래그먼트의 라이프사이클에 맞추어 자동으로 적절히 동작합니다.
+- 아래 코드를 봅시다.
+```java
+class MyLocationListener {
+    public MyLocationListener(Context context, Callback callback) {
+        // ...
+    }
+
+    void start() {
+        // connect to system location service
+    }
+
+    void stop() {
+        // disconnect from system location service
+    }
+}
+
+class MyActivity extends AppCompatActivity {
+    private MyLocationListener myLocationListener;
+
+    public void onCreate(...) {
+        myLocationListener = new MyLocationListener(this, (location) -> {
+            // update UI
+        });
+  }
+
+    public void onStart() {
+        super.onStart();
+        myLocationListener.start();
+    }
+
+    public void onStop() {
+        super.onStop();
+        myLocationListener.stop();
+    }
+}
+```
+- 이 코드는 앱에서 실제로 잘 동작하지만, onStop() 없이 onStart()가 다시 호출되는 상황이 발생할 수 있습니다. 그래서 아래와 같은 코드로 수정합니다.
+```java
+class MyActivity extends AppCompatActivity {
+    private MyLocationListener myLocationListener;
+
+    public void onCreate(...) {
+        myLocationListener = new MyLocationListener(this, location -> {
+            // update UI
+        });
+    }
+
+    public void onStart() {
+        super.onStart();
+        Util.checkUserStatus(result -> {
+            // what if this callback is invoked AFTER activity is stopped?
+            if (result) {
+                myLocationListener.start();
+            }
+        });
+    }
+
+    public void onStop() {
+        super.onStop();
+        myLocationListener.stop();
+    }
+}
+```
+- android.arch.lifecycle 패키지는 이러한 문제들을 해결하는 데 돕습니다.
+
+### 라이프사이클
+- Lifecycle
+
+### LifecycleOwner
+
+### Best practices
+
+### 추가적인 내용
