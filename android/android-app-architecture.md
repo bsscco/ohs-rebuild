@@ -542,8 +542,8 @@ class MyActivity extends AppCompatActivity {
 	```	
 
 ### LifecycleOwner
-- LifecycleOwner
-
+- LifecycleOwner는 라이프사이클을 가지는 싱글 메소드 인터페이스입니다. getLifecycle()이라는 메소드만 가집니다.
+- 
 ### Best practices
 
 ### 추가적인 내용
