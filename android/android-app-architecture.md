@@ -543,7 +543,10 @@ class MyActivity extends AppCompatActivity {
 
 ### LifecycleOwner
 - LifecycleOwner는 라이프사이클을 가지는 싱글 메소드 인터페이스입니다. getLifecycle()이라는 메소드만 가집니다.
+- 알아두기
+	- 아키텍쳐 컴포넌트들이 안정화될 때가지 Fragment와 AppCompatActivity 대신에 LifecycleFragment와 LifecycleActivity를 사용해주세요. 나중에 LifecycleFragment와 LifecycleActivity는 deprecated가 될 예정입니다.
 - 
+
 ### Best practices
 
 ### 추가적인 내용
