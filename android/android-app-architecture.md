@@ -29,6 +29,8 @@
 	- [닥스](https://developer.android.com/topic/libraries/architecture/room.html)
 	- [샘플](https://github.com/googlesamples/android-architecture-components)
 	
+	
+	
 # 덜 짧은 소개
 ### 개발자들이 직면한 공통의 문제
 - 안드로이드 앱은 독립적인 다양한 컴포넌트(Activity, Fragment 등)로 구성되어있습니다. 각 컴포넌트는 앱의 entry point가 될 수 있기 때문에 안드로이드 앱은 여러 개의 entry point를 가질 수 있습니다. 안드로이드 앱은 어떤 entry point에서 시작될지 모르기 때문에 **컴포넌트 간 데이터를 독립시켜야 합니다.**
@@ -339,11 +341,8 @@
 		```
 		- UserRepository로부터 오는 데이터의 장소를 바꾸어도 우리는 UserProfileFragment나 UserProfileViewModel을 수정할 필요가 없습니다. 그 이유는 추상화를 통한 유연성을 제공하기 때문입니다. 이것이 또한 놀라운 이유는 우리가 UserProfileViewModel을 테스트하기 위해 fake UserRepository를 제공할 수도 있기 때문입니다.
 		
-	- (19) 하나의 뿌리를 둔 데이터 뭉치
-		- 
-		
 	- 클래스 관계도
-		- 
+		- ![class-relations.png](https://github.com/bsscco/ohs-reproject/blob/master/android/blob/class-relations.png)
 	
 	- 데이터 셋팅의 흐름
 		- UserProfileFragment는 ```onViewCreated()```에서 멤버변수 UserProfileViewModel의 ```init()``` 호출 ->
@@ -357,7 +356,29 @@
 			- UserProfileFragment는 ```LiveData<User>```의 ```observe()```를 호출하면서 넣었던 콜백을 통해 갱신됨을 통보받고 핸들링
 
 - 테스팅
-- 최종 아키텍
+	- 우리는 테스팅을 분리시키는 것의 이점을 언급해왔습니다. 각 코드모듈마다 어떻게 테스트할 수 있을까요?
+		- UI, 인터렉션
+			- [Android UI Instrumentation test](https://developer.android.com/training/testing/unit-testing/instrumented-unit-tests.html) 참고, [Espresso](https://developer.android.com/training/testing/ui-testing/espresso-testing.html)를 생성하는 것입니다. fragment는 오직 ViewModel과 이야기하기 때문에 테스트가 편리합니다.
+			- Fragment code + Espresso code
+		- ViewModel
+			- [JUnit test](https://developer.android.com/training/testing/unit-testing/local-unit-tests.html)로 테스트될 수 있습니다. 우리는 오직 UserRepository의 mock만 필요합니다.
+			- ViewModel code + UserRespository mock code
+		- UserRepository
+			- JUnit test로 테스트할 수 있습니다. Webservice mock과 dao mock이 필요합니다. Webserivce와 dao 둘 다 인터페이스이기 때문에 더 복잡한 테스트 케이스를 위한 fake 구현체를 만들기 쉽습니다.
+			- UserRepository code + Webservice mock + dao mock
+		- UserDao
+			- instrumentation test를 추천합니다. 어떤 UI도 필요하지 않습니다. 각 테스트를 위해 어떤 사이드 이펙트도 없는 in-memory db를 만들어 사용할 수도 있습니다.
+			- UserDao code + instrumentation test code
+		- Webservice
+			- fake 로컬 서버를 만들 수 있도록 돕는 [MockWebServer](https://github.com/square/okhttp/tree/master/mockwebserver) 같은 라이브러리들을 이용하는 것이 좋습니다.
+			- Webservice code + MockWebServer code
+		- 인공적인 흐름 테스트 하기
+			- 아키텍처 컴포넌트는 백그라운드 스레드를 제어하기 위해 maven artifact(android.arch.core:core-testing)를 제공합니다. 두 가지 JUnit rule이 있습니다.
+				- InstantTaskExecuteRule : 아키텍처 컴포넌트가 즉각 백그라운드 작업을 실행할 수 있게 하는 룰입니다.
+				- CountingTaskExecuteRule : instrumentation test를 위해서 아키텍처 컴포넌트의 백그라운드 작업을 기다리게 하기 위해 사용되거나 리소스를 대기하는 espresso를 연결하기 위해 사용될 수 있습니다.
+
+- 최종 아키텍쳐
+	- 
 
 ### 원칙 가이드
 
