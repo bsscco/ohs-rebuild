@@ -520,9 +520,29 @@ class MyActivity extends AppCompatActivity {
 - android.arch.lifecycle 패키지는 이러한 문제들을 해결하는 데 돕습니다.
 
 ### 라이프사이클
-- Lifecycle
+- Lifecycle은 다른 객체들이 액티비티나 프래그먼트의 라이프사이클 상태를 관찰할 수 있도록 돕는 클래스입니다. Lifecycle은 라이프사이클 상태를 관찰하기 위해 두 가지 enumaration을 사용합니다. 
+	- Event
+	 	- 라이프사이클 이벤트들은 프레임워크와 Lifecycle 클래스로부터 디스패치 됩니다. 이러한 이벤트들은 액티비티나 프래그먼트의 이벤트 콜백과 매치됩니다.
+	- State
+		- 앱 컴포넌트의 현재 상태는 Lifecycle 객체에 의해 추적됩니다.
+	- ![lifecycle-states.png](https://developer.android.com/images/topic/libraries/architecture/lifecycle-states.png)
+
+- 아래 클래스는 어노테이션을 통해 라이프사이클 상태를 관찰할 수 있습니다.
+	```java
+	public class MyObserver implements LifecycleObserver {
+	    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+	    public void onResume() {
+	    }
+
+	    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+	    public void onPause() {
+	    }
+	}
+	aLifecycleOwner.getLifecycle().addObserver(new MyObserver());
+	```	
 
 ### LifecycleOwner
+- LifecycleOwner
 
 ### Best practices
 
