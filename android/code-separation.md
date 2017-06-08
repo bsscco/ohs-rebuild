@@ -1,7 +1,8 @@
-### MVC(Model-View-Controller)
-- 뭔가?
-	- 서로 종속되는 ```View```와 ```Model``` 사이의 관계를 완전히 끊어서 ```View```의 재활용성을 높힘.
-- 구현방법
-	- ```View```의 UI를 바꾸는 작업은 ```View```에 함수로 정의해서 함수로만 접근하도록 한다.
-	- 이렇게 하면 ```View```는 ```Model```에 대해 몰라도 된다.
-	- ```Controller```가 ```View```와 ```Model```을 가지고 있는다.
+### MVC 잘 적용하기
+- View와 Model 간에 서로 모르게 한다.
+	- View와 Model의 재활용 가능성이 높아진다.
+- Controller의 역할
+	- Controller는 View와 Model을 가진다(has a).
+	- View에게 갱신을 요청하고, 갱신을 위한 데이터를 제공하는 것은 Controller의 역할이다.
+	- View에서 발생한 이벤트를 핸들링하는 것은 Controller의 역할이다. 핸들링 안에는 Model에 데이터를 조작을 요청하는 작업도 포함한다.
+
