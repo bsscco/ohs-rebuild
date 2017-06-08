@@ -31,6 +31,8 @@
 <br />
 <br />
 <br />
+<br />
+<br />
 
 # 덜 짧은 소개
 ### 개발자들이 직면한 공통의 문제
@@ -424,6 +426,8 @@ public class Resource<T> {
 <br />
 <br />
 <br />
+<br />
+<br />
 
 # 아키텍쳐 컴포넌트를 프로젝트에 추가하기
 ### 구글 메이븐 저장소 추가하기
@@ -450,6 +454,8 @@ allprojects {
 		- testCompile "android.arch.persistence.room:testing:1.0.0-alpha1"
 	- Room RxJava 지원
 		- compile "android.arch.persistence.room:rxjava2:1.0.0-alpha1"
+<br />
+<br />
 <br />
 <br />
 <br />
@@ -553,3 +559,29 @@ class MyActivity extends AppCompatActivity {
 ### Best practices
 
 ### 추가적인 내용
+<br />
+<br />
+<br />
+<br />
+<br />
+
+# LiveData
+<br />
+<br />
+<br />
+<br />
+<br />
+
+# ViewModel
+<br />
+<br />
+<br />
+<br />
+<br />
+
+# Room
+<br />
+<br />
+<br />
+<br />
+<br />
