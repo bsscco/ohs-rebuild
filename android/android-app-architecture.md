@@ -28,9 +28,10 @@
 	- [코드랩](https://codelabs.developers.google.com/codelabs/android-persistence/#0)
 	- [닥스](https://developer.android.com/topic/libraries/architecture/room.html)
 	- [샘플](https://github.com/googlesamples/android-architecture-components)
-	
-	
-	
+<br />
+<br />
+<br />
+
 # 덜 짧은 소개
 ### 개발자들이 직면한 공통의 문제
 - 안드로이드 앱은 독립적인 다양한 컴포넌트(Activity, Fragment 등)로 구성되어있습니다. 각 컴포넌트는 앱의 entry point가 될 수 있기 때문에 안드로이드 앱은 여러 개의 entry point를 가질 수 있습니다. 안드로이드 앱은 어떤 entry point에서 시작될지 모르기 때문에 **컴포넌트 간 데이터를 독립시켜야 합니다.**
@@ -420,8 +421,9 @@ public class Resource<T> {
     }
 }
 ```
-
-
+<br />
+<br />
+<br />
 
 # 아키텍쳐 컴포넌트를 프로젝트에 추가하기
 ### 구글 메이븐 저장소 추가하기
@@ -448,8 +450,9 @@ allprojects {
 		- testCompile "android.arch.persistence.room:testing:1.0.0-alpha1"
 	- Room RxJava 지원
 		- compile "android.arch.persistence.room:rxjava2:1.0.0-alpha1"
-
-
+<br />
+<br />
+<br />
 
 # 라이프사이클 핸들링하기
 ### 소개
